@@ -11,7 +11,9 @@ module top_tb;
     //==========================================================
     // DUT：被测顶层
     //==========================================================
-    top u_top (
+    top #(
+        .PROGRAM_HEX("../../../../Test/program.hex")   // 相对路径，或使用绝对路径
+    ) u_top (
         .clk (clk),
         .rst (rst)
     );
@@ -36,8 +38,7 @@ module top_tb;
         rst = 1'b0;
 
         // 让程序跑足够多的周期
-        // 你的 program.hex 有 5 条指令，30 个周期足够观察完整过程
-        repeat (30) @(posedge clk);
+        repeat (6) @(posedge clk);
 
         $display("========================================");
         $display("Simulation finished at time %0t", $time);

@@ -168,8 +168,7 @@ module datapath (
 
     //==========================================================
     // Branch comparator
-    // 不依赖 ALU 的 zero/slt 结果。
-    // 这样 branch 判断逻辑更加直接。
+    // 不用ALU的zero/slt结果。
     //==========================================================
     always_comb begin
         branch_taken = 1'b0;
@@ -195,7 +194,7 @@ module datapath (
     //     PC + J-immediate
     // JALR target:
     //     (rs1 + I-immediate) & ~1
-    // imm 的具体格式已经由 controller -> imm_gen 决定。
+    // imm 具体格式已经由controller->imm_gen决定。
     assign branch_target = pc + imm;
     assign jal_target = pc + imm;
     assign jalr_target = (rs1_data + imm) & 32'hFFFF_FFFE;

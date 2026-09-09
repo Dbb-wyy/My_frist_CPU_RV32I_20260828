@@ -1,6 +1,8 @@
 `timescale 1ns / 1ps
 
-module top (
+module top #(
+    parameter string PROGRAM_HEX = ""   // 由 TB 传入
+)(
     input  logic clk,
     input  logic rst
 );
@@ -39,7 +41,7 @@ module top (
     //==========================================================
     rom #(
         .DEPTH   (2048),
-        .HEX_FILE("/home/dbb/Workspace/FPGA/My_frist_CPU_RV32I_20260828/program.hex")
+        .HEX_FILE(PROGRAM_HEX)
     ) u_rom (
         .addr  (pc),
         .instr (instr)
