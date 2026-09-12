@@ -1,6 +1,5 @@
-module imm_gen
-    import cpu_pkg::*;
-(
+import cpu_pkg::*;
+module imm_gen (
     input logic [31:0] inst,
     input imm_type_t imm_type,
     output logic [31:0] imm
