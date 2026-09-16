@@ -12,7 +12,7 @@ module top_tb;
     // DUT：被测顶层
     //==========================================================
     top #(
-        .PROGRAM_HEX("../../../../Test/test_04_jump.hex")   // 相对路径，或使用绝对路径
+        .PROGRAM_HEX("../../../../Test/test_05_lui_auipc.hex")   // 相对路径，或使用绝对路径
     ) u_top (
         .clk (clk),
         .rst (rst)

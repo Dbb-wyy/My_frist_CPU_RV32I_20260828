@@ -1,26 +1,33 @@
 ENTRY(_start)
 
+MEMORY
+{
+  ROM (rx) : ORIGIN = 0x00000000, LENGTH = 8K
+  RAM (rw) : ORIGIN = 0x10000000, LENGTH = 8K
+}
+
 SECTIONS
 {
-    . = 0x00000000;
+  .text : {
+    *(.text)
+    *(.text.*)
+  } > ROM
 
-    .text : {
-        *(.text)
-        *(.text.*)
-    }
+  .rodata : {
+    *(.rodata)
+    *(.rodata.*)
+  } > ROM
 
-    .rodata : {
-        *(.rodata)
-        *(.rodata.*)
-    }
+  .data : {
+    *(.data)
+    *(.data.*)
+  } > RAM
 
-    .data : {
-        *(.data)
-        *(.data.*)
-    }
+  .bss : {
+    *(.bss)
+    *(.bss.*)
+    *(COMMON)
+  } > RAM
 
-    .bss : {
-        *(.bss)
-        *(.bss.*)
-    }
+  _stack_top = ORIGIN(RAM) + LENGTH(RAM);
 }
