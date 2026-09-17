@@ -1,8 +1,6 @@
-/* test_07_mem_word.c */
+/* test_06_mem_word.c */
 #include <stdint.h>
-
 #define RAM_BASE ((volatile uint32_t *)0x10001000)
-
 /* 全局变量：有初值放 .data，无初值放 .bss */
 static uint32_t g_with_init = 0x11223344;
 static uint32_t g_zero;
@@ -23,6 +21,7 @@ int main(void) {
     
     // if ((uintptr_t)&g_zero == 0x10000000)
     //     return 0x4;
+
     /* 3. 验证 .data / .bss 是否正确初始化 */
     if (g_with_init != 0x11223344)
         return 0x1;
@@ -33,7 +32,6 @@ int main(void) {
     if (g_zero != 0xdeadbeef)
         return 0x3;
 
-    /* 4. 综合判断，返回码给 x31 观察 */
     if (a == 0x55 && b == 0xaa && c == 0xaa)
         return 0x600D; /* "GOOD" */
     return 0xBAD;
