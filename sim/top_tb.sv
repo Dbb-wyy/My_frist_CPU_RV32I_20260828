@@ -38,7 +38,7 @@ module top_tb;
         rst = 1'b0;
 
         // 让程序跑足够多的周期
-        repeat (100) @(posedge clk);
+        repeat (50) @(posedge clk);
 
         $display("========================================");
         $display("Simulation finished at time %0t", $time);
