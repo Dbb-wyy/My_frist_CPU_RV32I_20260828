@@ -12,7 +12,7 @@ module top_tb;
     // DUT：被测顶层
     //==========================================================
     top #(
-        .PROGRAM_HEX("../../../../Test/test_05_lui_auipc.hex")   // 相对路径，或使用绝对路径
+        .PROGRAM_HEX("../../../../Test/test_C/test_06_mem_word.hex")   // 相对路径，或使用绝对路径
     ) u_top (
         .clk (clk),
         .rst (rst)
@@ -38,7 +38,7 @@ module top_tb;
         rst = 1'b0;
 
         // 让程序跑足够多的周期
-        repeat (18) @(posedge clk);
+        repeat (100) @(posedge clk);
 
         $display("========================================");
         $display("Simulation finished at time %0t", $time);
@@ -51,7 +51,7 @@ module top_tb;
     // 通过层次路径观察内部寄存器堆 x1~x4
     //==========================================================
     initial begin
-        $monitor("t=%0t |rst=%b |pc=%h |instr=%h |x1=%h x2=%h x3=%h x4=%h x5=%h x6=%h x7=%h x8=%h x9=%h x10=%h x11=%h x12=%h x13=%h x14=%h x15=%h x16=%h x17=%h x18=%h x19=%h x20=%h",
+        $monitor("t=%0t |rst=%b |pc=%h |instr=%h |x1=%h x2=%h x3=%h x4=%h x5=%h x6=%h x7=%h x8=%h x9=%h x10=%h x11=%h x12=%h x13=%h x14=%h x15=%h x16=%h x17=%h x18=%h x19=%h x20=%h x31=%h",
                  $time,
                  rst,
                  u_top.pc,
@@ -79,7 +79,8 @@ module top_tb;
                  u_top.u_cpu.u_datapath.u_regfile.regs[17],
                  u_top.u_cpu.u_datapath.u_regfile.regs[18],
                  u_top.u_cpu.u_datapath.u_regfile.regs[19],
-                 u_top.u_cpu.u_datapath.u_regfile.regs[20]);
+                 u_top.u_cpu.u_datapath.u_regfile.regs[20],
+                 u_top.u_cpu.u_datapath.u_regfile.regs[31]);
     end
 
 endmodule
