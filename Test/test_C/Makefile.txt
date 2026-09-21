@@ -1,0 +1,49 @@
+CROSS   := riscv64-unknown-elf-
+CC      := $(CROSS)gcc
+OBJCOPY := $(CROSS)objcopy
+
+ARCH := rv32i
+ABI  := ilp32
+
+LDSCRIPT := linker.ld
+
+# C 编译选项：freestanding、无标准库、体积优先
+CFLAGS := \
+	-march=$(ARCH) -mabi=$(ABI) \
+	-nostdlib \
+	-nostartfiles \
+	-ffreestanding \
+	-fno-builtin \
+	-fno-common \
+	-Os -Wall \
+	-T $(LDSCRIPT)
+
+# GCC runtime library
+LIBGCC := -lgcc
+
+# 每个 C 测试文件都链接 start.S
+START := start.S
+
+TESTS_C := $(wildcard test_*.c)
+TESTS_S := $(wildcard test_*.S)
+
+ELFS := $(TESTS_C:.c=.elf) $(TESTS_S:.S=.elf)
+HEXS := $(ELFS:.elf=.hex)
+
+.PHONY: all clean
+
+all: $(HEXS)
+
+# C 测试：start.S + test_xx.c
+%.elf: %.c $(START) $(LDSCRIPT)
+	$(CC) $(CFLAGS) $(START) $< $(LIBGCC) -o $@
+
+# 纯汇编测试
+%.elf: %.S $(LDSCRIPT)
+	$(CC) $(CFLAGS) $< -o $@
+
+%.hex: %.elf
+	$(OBJCOPY) -O verilog --verilog-data-width 4 $< $@
+
+clean:
+	rm -f *.elf *.hex *.o
