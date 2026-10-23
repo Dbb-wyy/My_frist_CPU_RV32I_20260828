@@ -5,9 +5,15 @@ OBJCOPY := $(CROSS)objcopy
 ARCH := rv32i
 ABI  := ilp32
 
-LDSCRIPT := linker.ld
+# 目录配置
+CODE_DIR := code
+ELF_DIR  := ELFS
+HEX_DIR  := HEXS
 
-# C 编译选项：freestanding、无标准库、体积优先
+LDSCRIPT := linker.ld
+START    := start.S
+
+# C 编译与链接选项
 CFLAGS := \
 	-march=$(ARCH) -mabi=$(ABI) \
 	-nostdlib \
@@ -15,35 +21,42 @@ CFLAGS := \
 	-ffreestanding \
 	-fno-builtin \
 	-fno-common \
-	-Os -Wall \
+	-O0 -Wall \
 	-T $(LDSCRIPT)
 
 # GCC runtime library
 LIBGCC := -lgcc
 
-# 每个 C 测试文件都链接 start.S
-START := start.S
+# 自动扫描源码
+TESTS_C := $(wildcard $(CODE_DIR)/test_*.c)
+TESTS_S := $(wildcard $(CODE_DIR)/test_*.S)
 
-TESTS_C := $(wildcard test_*.c)
-TESTS_S := $(wildcard test_*.S)
+# 将 code/test_x.c 映射到 ELFS/test_x.elf
+ELFS := $(patsubst $(CODE_DIR)/%.c,$(ELF_DIR)/%.elf,$(TESTS_C)) 
+        $(patsubst $(CODE_DIR)/%.S,$(ELF_DIR)/%.elf,$(TESTS_S))
 
-ELFS := $(TESTS_C:.c=.elf) $(TESTS_S:.S=.elf)
-HEXS := $(ELFS:.elf=.hex)
+# 将 ELFS/test_x.elf 映射到 HEXS/test_x.hex
+HEXS := $(patsubst $(ELF_DIR)/%.elf,$(HEX_DIR)/%.hex,$(ELFS))
 
-.PHONY: all clean
+.PHONY: all clean dirs
 
-all: $(HEXS)
+all: $(HEXS) $(ELFS)
 
-# C 测试：start.S + test_xx.c
-%.elf: %.c $(START) $(LDSCRIPT)
+# 确保输出目录存在
+dirs:
+	mkdir -p $(ELF_DIR) $(HEX_DIR)
+
+# C 测试：start.S + code/test_x.c
+$(ELF_DIR)/%.elf: $(CODE_DIR)/%.c $(START) $(LDSCRIPT) | dirs
 	$(CC) $(CFLAGS) $(START) $< $(LIBGCC) -o $@
 
-# 纯汇编测试
-%.elf: %.S $(LDSCRIPT)
+# 纯汇编测试：code/test_x.S
+$(ELF_DIR)/%.elf: $(CODE_DIR)/%.S $(LDSCRIPT) | dirs
 	$(CC) $(CFLAGS) $< -o $@
 
-%.hex: %.elf
+# ELF 转换为 Verilog HEX
+$(HEX_DIR)/%.hex: $(ELF_DIR)/%.elf | dirs
 	$(OBJCOPY) -O verilog --verilog-data-width 4 $< $@
 
 clean:
-	rm -f *.elf *.hex *.o
+	rm -f $(ELF_DIR)/*.elf $(HEX_DIR)/*.hex

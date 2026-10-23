@@ -1,6 +1,6 @@
 #include <stdint.h>
 //#include <stdio.h>
-static const uint8_t n = 5;
+volatile static const uint8_t n = 5;
 void swap(uint8_t *a,uint8_t *b){
     uint8_t t = *a;
     *a = *b;
