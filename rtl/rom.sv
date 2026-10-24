@@ -3,7 +3,7 @@
 
 module rom #(
     parameter int DEPTH = 2048,
-    parameter string HEX_FILE = ""
+    parameter string HEX_FILE = "../../../../Test/test_C/HEXS/test_Data_In_ROM.hex"
 ) (
     // 指令读取端口
     input  logic [31:0] addr,
