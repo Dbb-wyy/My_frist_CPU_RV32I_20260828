@@ -1,7 +1,7 @@
 `timescale 1ns / 1ps
 
 module top #(
-    parameter string PROGRAM_HEX = ""
+    parameter string PROGRAM_HEX = "/home/dbb/Workspace/FPGA/My_frist_CPU_RV32I_20260828/Test/test_C/HEXS/test_board-bringup.hex"
 ) (
     input  logic clk,
     input  logic rst_n,       // 外部低电平有效复位

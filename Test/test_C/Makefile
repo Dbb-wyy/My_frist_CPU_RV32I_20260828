@@ -32,7 +32,7 @@ TESTS_C := $(wildcard $(CODE_DIR)/test_*.c)
 TESTS_S := $(wildcard $(CODE_DIR)/test_*.S)
 
 # 将 code/test_x.c 映射到 ELFS/test_x.elf
-ELFS := $(patsubst $(CODE_DIR)/%.c,$(ELF_DIR)/%.elf,$(TESTS_C)) 
+ELFS := $(patsubst $(CODE_DIR)/%.c,$(ELF_DIR)/%.elf,$(TESTS_C)) \
         $(patsubst $(CODE_DIR)/%.S,$(ELF_DIR)/%.elf,$(TESTS_S))
 
 # 将 ELFS/test_x.elf 映射到 HEXS/test_x.hex

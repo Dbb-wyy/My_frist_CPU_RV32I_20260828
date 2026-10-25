@@ -8,3 +8,6 @@ set_property PACKAGE_PIN W21 [get_ports uart_tx]
 
 set_property PACKAGE_PIN U7 [get_ports rst_n]
 set_property IOSTANDARD LVCMOS33 [get_ports rst_n]
+
+set_property PULLTYPE PULLUP [get_ports rst_n]
+set_property PULLTYPE PULLUP [get_ports uart_tx]

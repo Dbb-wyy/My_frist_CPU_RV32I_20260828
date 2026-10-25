@@ -3,7 +3,7 @@
 
 module rom #(
     parameter int DEPTH = 2048,
-    parameter string HEX_FILE = "../../../../Test/test_C/HEXS/test_Data_In_ROM.hex"
+    parameter string HEX_FILE = "/home/dbb/Workspace/FPGA/My_frist_CPU_RV32I_20260828/Test/test_C/HEXS/test_board-bringup.hex"
 ) (
     // 指令读取端口
     input  logic [31:0] addr,
